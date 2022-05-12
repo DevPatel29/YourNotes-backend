@@ -33,17 +33,14 @@ const auth = (req, res, next) => {
   try {
     const token = req.header("Authorization");
     if (!token) {
-      infoLogger.info("Invalid Authentication");
       return res.status(400).json({ msg: "Invalid Authentication" });
     }
 
     jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
       if (err) {
-        infoLogger.info("Authoriazation not valid");
         return res.status(400).json({ msg: "Authorization not valid." });
       }
 
-      infoLogger.info("Authorization successfull");
       req.user = user;
       next();
     });
@@ -112,7 +109,7 @@ const Notes = mongoose.model("Notes", notesSchema);
 const getNotes = async (req, res) => {
   try {
     const notes = await Notes.find({ user_id: req.user.id });
-    infoLogger.info(`getNotes - ${req.user.id}`);
+    infoLogger.info(`Get - getNotes`);
     res.status(200).json(notes);
   } catch (err) {
     errorLogger.error(err.message);
@@ -134,7 +131,7 @@ const createNotes = async (req, res) => {
     });
 
     await newNote.save();
-    infoLogger.info(`createNote - ${req.user.id}`);
+    infoLogger.info(`Post - createNote`);
     res.status(200).json({ msg: "Created a Note", id: newNote._id });
   } catch (err) {
     errorLogger.error(err.message);
@@ -153,7 +150,7 @@ const deleteNotes = async (req, res) => {
     };
     await deleteRec(req.params.id);
     // await Notes.findByIdAndDelete(req.params.id);
-    infoLogger.info(`deleteNote - ${req.params.id}`);
+    infoLogger.info(`Delete - deleteNote`);
     res.status(200).json({ msg: "Deleted the Note" });
   } catch (err) {
     return res.status(500).json({ msg: err.message });
@@ -173,7 +170,7 @@ const updateNote = async (req, res) => {
         parentPages: parentPages,
       }
     );
-    infoLogger.info(`updateNote - ${req.params.id}`);
+    infoLogger.info(`Put - updateNote`);
     res.status(200).json({ msg: "Notes Updated" });
   } catch (err) {
     errorLogger.error(err.message);
@@ -184,7 +181,7 @@ const updateNote = async (req, res) => {
 const getNote = async (req, res) => {
   try {
     const note = await Notes.findById(req.params.id);
-    infoLogger.info(`getNote - ${req.params.id}`);
+    infoLogger.info(`Get - getNote`);
     res.status(200).json(note);
   } catch (err) {
     errorLogger.error(err.message);
@@ -201,7 +198,7 @@ const getTitle = async (req, res) => {
         ans.push({ note_id: note._id, title: note.title });
       }
     }
-    infoLogger.info(`getTitle`);
+    infoLogger.info(`Post - getTitle`);
     res.status(200).json(ans);
   } catch (err) {
     errorLogger.error(err.message);
@@ -224,7 +221,7 @@ const deleteChildPage = async (req, res) => {
       }
     );
 
-    infoLogger.info(`deleteChildPage - ${req.params.id}`);
+    infoLogger.info(`Post - deleteChildPage`);
     res.status(200).json("ChildPage deleted");
   } catch (err) {
     errorLogger.error(err.message);

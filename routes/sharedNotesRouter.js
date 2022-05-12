@@ -86,7 +86,7 @@ const addToShareNotes = async (req, res) => {
         }
       );
     }
-    infoLogger.info(`sharedNote added - ${req.user.id}`);
+    infoLogger.info(`Post - sharedNote_added`);
     res.status(200).json({ msg: "sharenote added successfully" });
   } catch (err) {
     errorLogger.error(err.message);
@@ -102,7 +102,7 @@ const getSharedNotes = async (req, res) => {
     } else {
       res.status(200).json(userShareNotes[0].othersNotes);
     }
-    infoLogger.info(`get sharedNotes - ${req.user.id}`);
+    infoLogger.info(`Get - get_sharedNotes`);
   } catch (err) {
     errorLogger.error(err.message);
     return res.status(500).json({ msg: err.message });
@@ -121,7 +121,7 @@ const deleteSharedNote = async (req, res) => {
           othersNotes: othersNotes,
         }
       );
-      infoLogger.info(`delete sharedNote - ${req.user.id}`);
+      infoLogger.info(`Post - delete_sharedNote`);
       res.status(200).json("Shared Note delete");
     }
   } catch (err) {
